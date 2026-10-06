@@ -24,4 +24,4 @@ This script overrides those read-only properties so the page always thinks it is
 3. Paste the snippet from [`snippet.js`](./snippet.js) into the Console tab and press Enter.
 4. You can now switch tabs freely. The counter (if the site shows one) will not increase.
 
-**Limitation:** the console snippet only applies to the current tab and is lost on reload. For a permanent fix, use a userscript.
+Limitation: the console snippet only applies to the current tab and is lost on reload. For a permanent fix, use a userscript.
