@@ -29,7 +29,8 @@ No extensions. No installs. No files to download. Just paste into the browser co
 
 ## Snippets
 
-### 1. All-in-one (recommended)
+### 1. All-in-one (recommended) 
+[all-in-one-snippet.js](https://github.com/Tw1kslv/uzdevumi-lv-bypass/blob/main/all-in-one-snippet.js)
 
 Combines tab-switch bypass, right-click re-enable, and text-selection re-enable:
 
@@ -80,6 +81,7 @@ Combines tab-switch bypass, right-click re-enable, and text-selection re-enable:
 ```
 
 ### 2. Tab-switch bypass only
+[tab-switch-snippet.js](https://github.com/Tw1kslv/uzdevumi-lv-bypass/blob/main/tab-switch-snippet.js)
 
 ```javascript
 (function () {
@@ -95,6 +97,7 @@ Combines tab-switch bypass, right-click re-enable, and text-selection re-enable:
 ```
 
 ### 3. Right-click + text selection only
+[right-click-and-selection-snippet.js](https://github.com/Tw1kslv/uzdevumi-lv-bypass/blob/main/right-click-and-selection-snippet.js)
 
 ```javascript
 (function () {
