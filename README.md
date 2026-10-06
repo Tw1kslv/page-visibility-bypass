@@ -98,7 +98,6 @@ Combines tab-switch bypass, right-click re-enable, and text-selection re-enable:
 
 ```javascript
 (function () {
-  // Right-click
   window.oncontextmenu = null;
   document.oncontextmenu = null;
   if (document.body) document.body.oncontextmenu = null;
