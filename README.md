@@ -58,6 +58,14 @@ Combines tab-switch bypass, right-click re-enable, and text-selection re-enable:
       -moz-user-select: text !important;
       -ms-user-select: text !important;
     }
+    ::selection {
+      background-color: #3297fd !important;
+      color: #fff !important;
+    }
+    ::-moz-selection {
+      background-color: #3297fd !important;
+      color: #fff !important;
+    }
   `;
   (document.head || document.documentElement).appendChild(style);
 
@@ -76,7 +84,47 @@ Combines tab-switch bypass, right-click re-enable, and text-selection re-enable:
     window.addEventListener(evt, e => e.stopImmediatePropagation(), true);
   });
 
-  console.log('%c[page-visibility-bypass] all overrides applied', 'color:#0a0;font-weight:bold');
+  if (window.Selection && Selection.prototype) {
+    Selection.prototype.removeAllRanges = function () {};
+    Selection.prototype.empty = function () {};
+    Selection.prototype.removeRange = function () {};
+  }
+
+  const style12 = document.createElement('style');
+  style12.textContent = `
+    #test-right-click-12 :not(input):not(textarea)::selection {
+      background-color: #3297fd !important;
+      color: #fff !important;
+    }
+  `;
+  (document.head || document.documentElement).appendChild(style12);
+
+  document.querySelectorAll(
+    'div[style*="position:absolute"][style*="inset:0"], ' +
+    'div[style*="position: absolute"][style*="inset: 0"]'
+  ).forEach(el => {
+    if (!el.textContent.trim() && !el.children.length) {
+      el.remove();
+    }
+  });
+
+  ['paste', 'input'].forEach(evt => {
+    window.addEventListener(evt, e => e.stopImmediatePropagation(), true);
+  });
+
+  document.querySelectorAll('input, textarea').forEach(el => {
+    let lastValue = el.value;
+    el.addEventListener('input', (e) => {
+      if (el.value.length < lastValue.length) {
+        el.value = lastValue;
+        e.stopImmediatePropagation();
+      } else {
+        lastValue = el.value;
+      }
+    }, true);
+  });
+
+  console.log('%c[page-visibility-bypass] ALL overrides applied', 'font-weight:bold');
 })();
 ```
 
@@ -103,6 +151,8 @@ Combines tab-switch bypass, right-click re-enable, and text-selection re-enable:
 
 ```javascript
 (function () {
+  'use strict';
+
   window.oncontextmenu = null;
   document.oncontextmenu = null;
   if (document.body) document.body.oncontextmenu = null;
@@ -115,6 +165,14 @@ Combines tab-switch bypass, right-click re-enable, and text-selection re-enable:
       -webkit-user-select: text !important;
       -moz-user-select: text !important;
       -ms-user-select: text !important;
+    }
+    ::selection {
+      background-color: #3297fd !important;
+      color: #fff !important;
+    }
+    ::-moz-selection {
+      background-color: #3297fd !important;
+      color: #fff !important;
     }
   `;
   (document.head || document.documentElement).appendChild(style);
@@ -134,7 +192,47 @@ Combines tab-switch bypass, right-click re-enable, and text-selection re-enable:
     window.addEventListener(evt, e => e.stopImmediatePropagation(), true);
   });
 
-  console.log('[page-visibility-bypass] right-click and selection re-enabled');
+  if (window.Selection && Selection.prototype) {
+    Selection.prototype.removeAllRanges = function () {};
+    Selection.prototype.empty = function () {};
+    Selection.prototype.removeRange = function () {};
+  }
+
+  const style12 = document.createElement('style');
+  style12.textContent = `
+    #test-right-click-12 :not(input):not(textarea)::selection {
+      background-color: #3297fd !important;
+      color: #fff !important;
+    }
+  `;
+  (document.head || document.documentElement).appendChild(style12);
+
+  document.querySelectorAll(
+    'div[style*="position:absolute"][style*="inset:0"], ' +
+    'div[style*="position: absolute"][style*="inset: 0"]'
+  ).forEach(el => {
+    if (!el.textContent.trim() && !el.children.length) {
+      el.remove();
+    }
+  });
+
+  ['paste', 'input'].forEach(evt => {
+    window.addEventListener(evt, e => e.stopImmediatePropagation(), true);
+  });
+
+  document.querySelectorAll('input, textarea').forEach(el => {
+    let lastValue = el.value;
+    el.addEventListener('input', (e) => {
+      if (el.value.length < lastValue.length) {
+        el.value = lastValue;
+        e.stopImmediatePropagation();
+      } else {
+        lastValue = el.value;
+      }
+    }, true);
+  });
+
+  console.log('[page-visibility-bypass] right-click, selection, and paste re-enabled');
 })();
 ```
 
