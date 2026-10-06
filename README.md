@@ -82,6 +82,7 @@ Combines tab-switch bypass, right-click re-enable, and text-selection re-enable:
 
 ### 2. Tab-switch bypass only
 [tab-switch-snippet.js](https://github.com/Tw1kslv/uzdevumi-lv-bypass/blob/main/tab-switch-snippet.js)
+[You can test it on this website](https://jasonli0616.github.io/tabs-test/)
 
 ```javascript
 (function () {
@@ -98,6 +99,7 @@ Combines tab-switch bypass, right-click re-enable, and text-selection re-enable:
 
 ### 3. Right-click + text selection only
 [right-click-and-selection-snippet.js](https://github.com/Tw1kslv/uzdevumi-lv-bypass/blob/main/right-click-and-selection-snippet.js)
+[You can test it on this website](https://webbrowsertools.com/test-right-click/)
 
 ```javascript
 (function () {
