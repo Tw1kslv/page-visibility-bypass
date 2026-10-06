@@ -2,7 +2,7 @@
 
 A collection of DevTools console snippets that override the browser's Page Visibility API and re-enable right-click and text selection on sites that block them.
 
-Primarily built to bypass the anti-cheating and anti-copying measures on [uzdevumi.lv](https://www.uzdevumi.lv/) — the Latvian homework and exercise platform — but the snippets work on any site that uses the same standard browser APIs.
+Primarily built to bypass the anti-cheating and anti-copying measures on [uzdevumi.lv](https://www.uzdevumi.lv/) but the snippets work on any site that uses the same standard browser APIs.
 
 No extensions. No installs. No files to download. Just paste into the browser console.
 
