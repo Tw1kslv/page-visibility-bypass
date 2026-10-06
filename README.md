@@ -25,3 +25,11 @@ This script overrides those read-only properties so the page always thinks it is
 4. You can now switch tabs freely. The counter (if the site shows one) will not increase.
 
 Limitation: the console snippet only applies to the current tab and is lost on reload. For a permanent fix, use a userscript.
+
+# Limitations
+
+- Does not defeat server-side tracking, WebRTC checks, mouse/keyboard activity monitoring, or requestAnimationFrame throttling.
+
+- If a site checks document.hasFocus() directly, you may also need to override that. The userscript version does.
+
+- Some sites detect that document.hidden and visibilityState have been tampered with (rare, but possible).
