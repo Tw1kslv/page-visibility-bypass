@@ -1,39 +1,183 @@
-# page-visibility-bypass
+# uzdevumi-lv-bypass
 
-Overrides the Page Visibility API to prevent tab-switch detection. Originally built to get past the anti-cheating block on uzdevumi.lv, but works on any site that relies on `visibilitychange`, `blur`, or `focus` events to log when you leave the tab.
+A collection of **DevTools console snippets** that override the browser's Page Visibility API and re-enable right-click and text selection on sites that block them.
 
-## What it does
+Primarily built to bypass the anti-cheating and anti-copying measures on [uzdevumi.lv](https://www.uzdevumi.lv/) — the Latvian homework and exercise platform — but the snippets work on any site that uses the same standard browser APIs.
 
-Modern browsers expose the [Page Visibility API](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API). When you switch tabs, minimize the window, or move focus away, the browser fires a `visibilitychange` event and flips:
+No extensions. No installs. No files to download. Just paste into the browser console.
+
+## What it bypasses
+
+| Protection | How the site does it | How this repo defeats it |
+|------------|----------------------|--------------------------|
+| Tab-switch detection | Listens to `visibilitychange`, `blur`, `focus` | Overrides `document.hidden` / `document.visibilityState`, blocks the events |
+| Disabled right-click | `oncontextmenu` handler | Clears the handler, stops the event in the capture phase |
+| Blocked text selection | `user-select: none` CSS, `onselectstart` handler | Re-enables `user-select`, clears handlers |
+| Blocked copy / cut | `oncopy` / `oncut` handlers | Clears them, stops the events |
+
+## Usage
+
+1. Open the target page (e.g. an exercise on `uzdevumi.lv`).
+2. Open DevTools:
+   - **Windows / Linux:** `F12` or `Ctrl` + `Shift` + `J`
+   - **macOS:** `Cmd` + `Option` + `J`
+3. Click the **Console** tab.
+4. Paste **one** of the snippets below and press `Enter`.
+5. Close DevTools. The overrides stay active until you reload the page.
+
+> **Note (Chrome / Edge):** the first time you paste into the console, the browser may show *"Warning: Don't paste code you don't understand…"*. Type `allow pasting` and press Enter to unlock it, then paste again.
+
+## Snippets
+
+### 1. All-in-one (recommended)
+
+Combines tab-switch bypass, right-click re-enable, and text-selection re-enable:
+
+```javascript
+(function () {
+  'use strict';
+
+  // --- 1. Tab-switch detection (Page Visibility API) ---
+  Object.defineProperty(document, 'hidden', { get: () => false, configurable: true });
+  Object.defineProperty(document, 'visibilityState', { get: () => 'visible', configurable: true });
+
+  ['visibilitychange', 'webkitvisibilitychange', 'blur', 'focus'].forEach(evt => {
+    window.addEventListener(evt, e => e.stopImmediatePropagation(), true);
+  });
+
+  // --- 2. Right-click ---
+  window.oncontextmenu = null;
+  document.oncontextmenu = null;
+  if (document.body) document.body.oncontextmenu = null;
+  window.addEventListener('contextmenu', e => e.stopImmediatePropagation(), true);
+
+  // --- 3. Text selection ---
+  const style = document.createElement('style');
+  style.textContent = `
+    *, *::before, *::after {
+      user-select: text !important;
+      -webkit-user-select: text !important;
+      -moz-user-select: text !important;
+      -ms-user-select: text !important;
+    }
+  `;
+  (document.head || document.documentElement).appendChild(style);
+
+  window.onselectstart = null;
+  document.onselectstart = null;
+  if (document.body) document.body.onselectstart = null;
+
+  // --- 4. Copy / cut / drag ---
+  window.ondragstart = null;
+  document.ondragstart = null;
+  window.oncopy = null;
+  document.oncopy = null;
+  window.oncut = null;
+  document.oncut = null;
+
+  ['selectstart', 'dragstart', 'copy', 'cut'].forEach(evt => {
+    window.addEventListener(evt, e => e.stopImmediatePropagation(), true);
+  });
+
+  console.log('%c[page-visibility-bypass] all overrides applied', 'color:#0a0;font-weight:bold');
+})();
+```
+
+### 2. Tab-switch bypass only
+
+```javascript
+(function () {
+  Object.defineProperty(document, 'hidden', { get: () => false, configurable: true });
+  Object.defineProperty(document, 'visibilityState', { get: () => 'visible', configurable: true });
+
+  ['visibilitychange', 'webkitvisibilitychange', 'blur', 'focus'].forEach(evt => {
+    window.addEventListener(evt, e => e.stopImmediatePropagation(), true);
+  });
+
+  console.log('[page-visibility-bypass] tab-switch detection disabled');
+})();
+```
+
+### 3. Right-click + text selection only
+
+```javascript
+(function () {
+  // Right-click
+  window.oncontextmenu = null;
+  document.oncontextmenu = null;
+  if (document.body) document.body.oncontextmenu = null;
+  window.addEventListener('contextmenu', e => e.stopImmediatePropagation(), true);
+
+  // Text selection CSS
+  const style = document.createElement('style');
+  style.textContent = `
+    *, *::before, *::after {
+      user-select: text !important;
+      -webkit-user-select: text !important;
+      -moz-user-select: text !important;
+      -ms-user-select: text !important;
+    }
+  `;
+  (document.head || document.documentElement).appendChild(style);
+
+  // Selection / copy / cut handlers
+  window.onselectstart = null;
+  document.onselectstart = null;
+  if (document.body) document.body.onselectstart = null;
+
+  window.ondragstart = null;
+  document.ondragstart = null;
+  window.oncopy = null;
+  document.oncopy = null;
+  window.oncut = null;
+  document.oncut = null;
+
+  ['selectstart', 'dragstart', 'copy', 'cut'].forEach(evt => {
+    window.addEventListener(evt, e => e.stopImmediatePropagation(), true);
+  });
+
+  console.log('[page-visibility-bypass] right-click and selection re-enabled');
+})();
+```
+
+## How it works
+
+Every "protection" these sites use is client-side JavaScript and CSS. That means it can be reverted from the same tab it runs in.
+
+**Tab-switch detection** relies on the [Page Visibility API](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API). When you switch tabs, minimize the window, or move focus away, the browser fires a `visibilitychange` event and flips:
 
 - `document.hidden` → `true`
 - `document.visibilityState` → `"hidden"`
 
-Many anti-cheat systems (Canvas, uzdevumi.lv, various quiz platforms) listen for that event and log it — sometimes showing the instructor a counter or a warning like *"Stopped viewing the quiz."*
+Canvas, uzdevumi.lv, and most quiz platforms listen for that event and log it — sometimes showing a counter or warning like *"Stopped viewing the quiz."*
 
-This script overrides those read-only properties so the page always thinks it is visible, and stops `visibilitychange`, `blur`, and `focus` events from reaching the page's own listeners.
+`document.hidden` and `document.visibilityState` are **read-only native properties**, so you can't just assign to them. But you can replace their getters with `Object.defineProperty`, making them always report visible. Adding a `stopImmediatePropagation` listener in the **capture phase** stops `visibilitychange`, `blur`, and `focus` from ever reaching the page's own listeners.
 
-## Usage
+**Right-click blocking** is done with `oncontextmenu`. Setting `window.oncontextmenu = null` clears an inline or assigned handler. `addEventListener(..., true)` + `stopImmediatePropagation` blocks listeners added via `addEventListener`.
 
-### Option 1 — DevTools console (quick, per-tab)
+**Text selection blocking** is CSS (`user-select: none`) plus `onselectstart` / `dragstart` handlers. Injecting a `<style>` with `!important` overrides the CSS, and clearing the handlers restores normal selection.
 
-1. Open the page you want to bypass (e.g. `https://www.uzdevumi.lv/...`).
-2. Open DevTools:
-   - Windows / Linux: `F12` or `Ctrl` + `Shift` + `J`
-   - macOS: `Cmd` + `Option` + `J`
-3. Paste the snippet from [`snippet.js`](./snippet.js) into the Console tab and press Enter.
-4. You can now switch tabs freely. The counter (if the site shows one) will not increase.
+**Copy / cut blocking** is `oncopy` / `oncut` handlers, cleared the same way.
 
-Limitation: the console snippet only applies to the current tab and is lost on reload. For a permanent fix, use a userscript.
+## Limitations
 
-# Limitations
-- Does not defeat server-side tracking, WebRTC checks, mouse/keyboard activity monitoring, or requestAnimationFrame throttling.
+- The overrides **only last for the current tab** and are lost on reload. Paste again after every reload.
+- If a site later adds **server-side** checks (requests to the server logging activity, WebRTC, mouse/keyboard timing), this snippet alone won't fool them.
+- If a site re-applies `user-select: none` with a `MutationObserver`, you may need to loop the CSS injection. Not currently implemented.
+- Chrome/Edge sometimes warn about pasting code — type `allow pasting` in the console first.
+- Not tested against every exercise type on uzdevumi.lv. Some may use additional checks.
+- Bookmarks with `javascript:` URLs that do the same thing may be blocked by strict Content Security Policy on some sites. The console method always works.
 
-- If a site checks document.hasFocus() directly, you may also need to override that. The userscript version does.
+## Optional: permanent use via userscript
 
-- Some sites detect that document.hidden and visibilityState have been tampered with (rare, but possible).
+If you don't want to paste every reload, install [Tampermonkey](https://www.tampermonkey.net/) or [Violentmonkey](https://violentmonkey.github.io/) and create a script with `@run-at document-start` and `@match *://*.uzdevumi.lv/*`, pasting the combined snippet above into the body. It will then run automatically before the page's own scripts.
 
-# Credits
-- Based on the common userscript pattern for overriding the Page Visibility API.
+## Disclaimer
 
-- Tested against https://www.cheatgpt.app/tools/tab-switch-detection-test
+This project is **for educational purposes** — to demonstrate how browser APIs like the Page Visibility API work, and how easily client-side anti-cheat / anti-copy measures can be reverted.
+
+Using it to break the rules of a graded assignment, exam, or a site's Terms of Service is your responsibility, not the author's. If your teacher can see a log of when you left the tab, defeating that log defeats the point of the platform. Don't do that.
+
+## License
+
+MIT
