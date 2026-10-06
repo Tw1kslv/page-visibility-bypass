@@ -25,12 +25,3 @@ This script overrides those read-only properties so the page always thinks it is
 4. You can now switch tabs freely. The counter (if the site shows one) will not increase.
 
 **Limitation:** the console snippet only applies to the current tab and is lost on reload. For a permanent fix, use a userscript.
-
-### Option 2 — Userscript (Tampermonkey / Violentmonkey)
-
-1. Install [Tampermonkey](https://www.tampermonkey.net/) or [Violentmonkey](https://violentmonkey.github.io/).
-2. Open the raw link to [`page-visibility-bypass.user.js`](./page-visibility-bypass.user.js).
-3. The userscript manager should offer to install it. Confirm.
-4. Reload the target site. The script runs at `document-start`, before the page's own scripts.
-
-To limit it to specific sites, edit the `@match` lines at the top of the `.user.js` file.
