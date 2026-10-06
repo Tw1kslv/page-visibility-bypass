@@ -171,13 +171,3 @@ Canvas, uzdevumi.lv, and most quiz platforms listen for that event and log it â€
 ## Optional: permanent use via userscript
 
 If you don't want to paste every reload, install [Tampermonkey](https://www.tampermonkey.net/) or [Violentmonkey](https://violentmonkey.github.io/) and create a script with `@run-at document-start` and `@match *://*.uzdevumi.lv/*`, pasting the combined snippet above into the body. It will then run automatically before the page's own scripts.
-
-## Disclaimer
-
-This project is **for educational purposes** â€” to demonstrate how browser APIs like the Page Visibility API work, and how easily client-side anti-cheat / anti-copy measures can be reverted.
-
-Using it to break the rules of a graded assignment, exam, or a site's Terms of Service is your responsibility, not the author's. If your teacher can see a log of when you left the tab, defeating that log defeats the point of the platform. Don't do that.
-
-## License
-
-MIT
