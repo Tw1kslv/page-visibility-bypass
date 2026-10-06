@@ -27,9 +27,13 @@ This script overrides those read-only properties so the page always thinks it is
 Limitation: the console snippet only applies to the current tab and is lost on reload. For a permanent fix, use a userscript.
 
 # Limitations
-
 - Does not defeat server-side tracking, WebRTC checks, mouse/keyboard activity monitoring, or requestAnimationFrame throttling.
 
 - If a site checks document.hasFocus() directly, you may also need to override that. The userscript version does.
 
 - Some sites detect that document.hidden and visibilityState have been tampered with (rare, but possible).
+
+# Credits
+- Based on the common userscript pattern for overriding the Page Visibility API.
+
+- Tested against https://www.cheatgpt.app/tools/tab-switch-detection-test
