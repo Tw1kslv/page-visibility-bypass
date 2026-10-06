@@ -17,12 +17,12 @@ No extensions. No installs. No files to download. Just paste into the browser co
 
 ## Usage
 
-1. Open the target page (e.g. an exercise on `uzdevumi.lv`).
+1. Open the target page (e.g. a test on `uzdevumi.lv`).
 2. Open DevTools:
    - **Windows / Linux:** `F12` or `Ctrl` + `Shift` + `J`
    - **macOS:** `Cmd` + `Option` + `J`
-3. Click the **Console** tab.
-4. Paste **one** of the snippets below and press `Enter`.
+3. Click the Console tab.
+4. Paste one of the snippets below and press `Enter`.
 5. Close DevTools. The overrides stay active until you reload the page.
 
 > **Note (Chrome / Edge):** the first time you paste into the console, the browser may show *"Warning: Don't paste code you don't understand…"*. Type `allow pasting` and press Enter to unlock it, then paste again.
