@@ -37,7 +37,6 @@ Combines tab-switch bypass, right-click re-enable, and text-selection re-enable:
 (function () {
   'use strict';
 
-  // --- 1. Tab-switch detection (Page Visibility API) ---
   Object.defineProperty(document, 'hidden', { get: () => false, configurable: true });
   Object.defineProperty(document, 'visibilityState', { get: () => 'visible', configurable: true });
 
@@ -45,13 +44,11 @@ Combines tab-switch bypass, right-click re-enable, and text-selection re-enable:
     window.addEventListener(evt, e => e.stopImmediatePropagation(), true);
   });
 
-  // --- 2. Right-click ---
   window.oncontextmenu = null;
   document.oncontextmenu = null;
   if (document.body) document.body.oncontextmenu = null;
   window.addEventListener('contextmenu', e => e.stopImmediatePropagation(), true);
 
-  // --- 3. Text selection ---
   const style = document.createElement('style');
   style.textContent = `
     *, *::before, *::after {
@@ -67,7 +64,6 @@ Combines tab-switch bypass, right-click re-enable, and text-selection re-enable:
   document.onselectstart = null;
   if (document.body) document.body.onselectstart = null;
 
-  // --- 4. Copy / cut / drag ---
   window.ondragstart = null;
   document.ondragstart = null;
   window.oncopy = null;
@@ -108,7 +104,6 @@ Combines tab-switch bypass, right-click re-enable, and text-selection re-enable:
   if (document.body) document.body.oncontextmenu = null;
   window.addEventListener('contextmenu', e => e.stopImmediatePropagation(), true);
 
-  // Text selection CSS
   const style = document.createElement('style');
   style.textContent = `
     *, *::before, *::after {
@@ -120,7 +115,6 @@ Combines tab-switch bypass, right-click re-enable, and text-selection re-enable:
   `;
   (document.head || document.documentElement).appendChild(style);
 
-  // Selection / copy / cut handlers
   window.onselectstart = null;
   document.onselectstart = null;
   if (document.body) document.body.onselectstart = null;
